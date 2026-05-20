@@ -1,0 +1,3 @@
+[submodule "qiaomu-anything-to-notebooklm"]
+	path = qiaomu-anything-to-notebooklm
+	url = https://github.com/joeseesun/qiaomu-anything-to-notebooklm
