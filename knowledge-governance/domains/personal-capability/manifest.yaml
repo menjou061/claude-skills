@@ -1,0 +1,20 @@
+name: personal-capability
+version: 0.1.0
+status: draft
+description: 個人能力評估體系，從學習與行為事件反向提煉能力建設原則
+engine_compatibility: ">=0.5.0,<1.0.0"
+depends_on: []
+provides:
+  card_types:
+    - capability-principle
+    - learning-event-attribution
+  inputs:
+    - learning-event
+    - behavior-event
+  outputs:
+    - obsidian-markdown
+maintainer: <owner>
+tags:
+  - personal-growth
+  - decision-evaluation
+  - seeding

@@ -7,6 +7,7 @@ Personal Claude Code skills & agent configs for finance, crypto, media, and prod
 ```
 claude-skills/
 ├── btc-crypto-derivatives/        # BTC/ETH derivatives analysis + crypto-equity decisions
+├── knowledge-governance/          # Personal decision governance — 7-gate rule promotion, 6 sources, 5 redlines
 ├── longbridge/                    # Longbridge trading platform — market data, portfolio, orders
 ├── order-replay/                  # Daily order reconciliation — update brief + generate review
 ├── podcast-transcriber/           # YouTube / 小宇宙 / B站 transcript extraction
@@ -26,6 +27,7 @@ git clone https://github.com/menjou061/claude-skills.git ~/claude-skills
 mkdir -p ~/.claude/skills ~/.claude/prompts ~/.claude/scripts
 
 ln -s ~/claude-skills/btc-crypto-derivatives ~/.claude/skills/btc-crypto-derivatives
+ln -s ~/claude-skills/knowledge-governance ~/.claude/skills/knowledge-governance
 ln -s ~/claude-skills/longbridge ~/.claude/skills/longbridge
 ln -s ~/claude-skills/order-replay ~/.claude/skills/order-replay
 ln -s ~/claude-skills/podcast-transcriber ~/.claude/skills/podcast-transcriber

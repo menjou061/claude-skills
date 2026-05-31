@@ -1,0 +1,20 @@
+name: product-experience
+version: 0.1.0
+status: mvp
+description: 產品決策評估體系，從 bad case 反向提煉工作原則
+engine_compatibility: ">=0.5.0,<1.0.0"
+depends_on: []
+provides:
+  card_types:
+    - work-principle
+    - bad-case-attribution
+  inputs:
+    - product-decision
+    - post-mortem
+  outputs:
+    - obsidian-markdown
+maintainer: <owner>
+tags:
+  - product
+  - decision-evaluation
+  - seeding

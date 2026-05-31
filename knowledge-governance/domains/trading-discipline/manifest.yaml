@@ -1,0 +1,20 @@
+name: trading-discipline
+version: 0.1.0
+status: stable
+description: 投資決策評估體系，規則 + 案例歸因雙向迭代
+engine_compatibility: ">=0.5.0,<1.0.0"
+depends_on: []
+provides:
+  card_types:
+    - rule
+    - trade-log-attribution
+  inputs:
+    - trade-event
+    - macro-regime
+  outputs:
+    - obsidian-markdown
+maintainer: <owner>
+tags:
+  - investment
+  - decision-evaluation
+  - mature

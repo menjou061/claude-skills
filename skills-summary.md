@@ -75,6 +75,14 @@ Code Review，审查 Pull Request。
 将当前对话要点整理为结构化 Markdown，写入 Obsidian 的 `00-Inbox` 目录。
 - 触发词：「记备忘」「存到 Obsidian」「存到收件箱」
 
+### `knowledge-governance`
+个人决策治理系统：7 闸规则晋升 + 6 类采集源 + 5 条紅线（含元层「不自我授权」）。
+- 三个域：trading-discipline（投资）/ product-experience（产品）/ personal-capability（个人能力）+ book-digest（读书）+ curate（跨域策展）
+- 真源（Obsidian / 笔记系统）和 CC repo（治理流程 staging）严格分离
+- 7 闸：元认知 / 唯一性 / 可执行 / 痛感 / 频次 / 层级 / 个人化回测
+- 触发场景：候选规则晋升、复盘提案、PRD audit、对话结晶
+- 详见 `knowledge-governance/README.md`
+
 ---
 
 ## 任务调度

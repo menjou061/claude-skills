@@ -1,0 +1,20 @@
+name: curate
+version: 0.1.0
+status: draft
+description: 跨域知識策展，信息採集 → 推敲閘門 → 去留判定
+engine_compatibility: ">=0.5.0,<1.0.0"
+depends_on: []
+provides:
+  card_types:
+    - knowledge-card
+    - curation-decision
+  inputs:
+    - raw-information
+    - captured-snippet
+  outputs:
+    - obsidian-markdown
+maintainer: <owner>
+tags:
+  - knowledge-management
+  - curation
+  - draft
