@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<!--
+  ====================================================================
+  蝉镜 AI 项目 - 页面原型模板
+  ====================================================================
+  生成版本：chanjing-page-gen v0.1.0
+
+  用途：
+    - PM/设计可双击直接在浏览器预览
+    - 作为"高保真设计稿"交付给开发
+
+  二次开发提示（给开发）：
+    1. <template> 段落可整体复制到 .vue 的 <template>，
+       el-button/el-input 等用法保持不变
+    2. <script> 段落改为 <script setup>，
+       Vue.createApp({ setup() { return { ... } } }).use(...).mount('#app')
+       中 setup() 返回的内容即为 setup 顶层变量
+    3. CSS 变量（--gray-light-XX 等）已在项目内通过 src/style/variable.scss
+       的 SCSS 变量提供，可换为 $gray-light-XX 或保留原样（兼容）
+    4. 搜索 TODO[API] / TODO[STORE] / TODO[ROUTE] 找到所有需要补全的业务接入点
+    5. 删除 mock 数据，接入真实接口/store/路由
+  ====================================================================
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>蝉镜原型页</title>
+
+  <!-- Element Plus 样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
+
+  <style>
+    /* ============ Design Tokens（蝉镜浅色主题） ============ */
+    :root {
+      /* 中性灰 */
+      --gray-light-01: #F7F8FA;
+      --gray-light-02: #EDEFF3;
+      --gray-light-03: #E5E6EC;
+      --gray-light-04: #DBDEE3;
+      --gray-light-05: #C9CDD4;
+      --gray-light-06: #A9AEB8;
+      --gray-light-07: #86909C;
+      --gray-light-08: #6B7785;
+      --gray-light-09: #4E5969;
+      --gray-light-10: #1D2129;
+
+      /* 品牌色 */
+      --primary-light-01: #FFF8F6;
+      --primary-light-02: #FFF1EE;
+      --primary-light-03: #FFE4DC;
+      --primary-light-04: #FFD6CB;
+      --primary-light-05: #FFC9BA;
+      --primary-light-06: #FFA086;
+      --primary-light-07: #FF9275;
+      --primary-light-08: #FF7752;
+      --primary-light-09: #E56B4A;
+      --primary-light-10: #CC5F42;
+
+      /* 红色 */
+      --red-light-01: #F54B45;
+      --red-light-02: #F76E66;
+      --red-light-03: #CB2C2B;
+      --red-light-04: #FBB1A5;
+      --red-light-05: #FDD0C6;
+      --red-light-06: #FFEDE8;
+
+      /* 字体 */
+      --font-family-regular: "PingFangSC-Regular", "Microsoft Yahei", Arial, sans-serif;
+      --font-family-medium: "PingFangSC-Medium", "Microsoft Yahei", Arial, sans-serif;
+      --font-family-light: "PingFangSC-Light", "Microsoft Yahei", Arial, sans-serif;
+      --font-family-bold: "PingFangSC-Semibold", "PingFangSC-Regular", "Microsoft Yahei", Arial, sans-serif;
+
+      /* 字号 */
+      --font-size-12: 12px;
+      --font-size-13: 13px;
+      --font-size-14: 14px;
+      --font-size-15: 15px;
+      --font-size-16: 16px;
+      --font-size-18: 18px;
+      --font-size-20: 20px;
+      --font-size-24: 24px;
+      --font-size-26: 26px;
+
+      /* 圆角 */
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --radius-xl: 12px;
+      --radius-pill: 100px;
+
+      /* 间距 */
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-40: 40px;
+
+      /* Element Plus 主色覆盖 */
+      --el-color-primary: #FF7752;
+    }
+
+    /* ============ 基础重置 ============ */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-family-regular);
+      font-size: var(--font-size-14);
+      color: var(--gray-light-10);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    /* ============ 通用布局工具 ============ */
+    .page {
+      min-height: 100vh;
+      padding: var(--space-24);
+      background: var(--gray-light-01);
+    }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-24);
+      flex-wrap: wrap;
+      gap: var(--space-12);
+    }
+    .page-title {
+      font-size: var(--font-size-24);
+      font-family: var(--font-family-bold);
+      color: var(--gray-light-10);
+      margin: 0;
+    }
+    .page-description {
+      font-size: var(--font-size-14);
+      color: var(--gray-light-08);
+      margin: var(--space-8) 0 0 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      border: 1px solid var(--gray-light-02);
+    }
+    .card + .card { margin-top: var(--space-16); }
+    .card-title {
+      font-size: var(--font-size-16);
+      font-family: var(--font-family-medium);
+      color: var(--gray-light-10);
+      margin: 0 0 var(--space-16) 0;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-16);
+      margin-bottom: var(--space-16);
+    }
+    .form-item { min-width: 0; }
+    .form-item.full { grid-column: 1 / -1; }
+    .form-label {
+      display: block;
+      font-size: var(--font-size-14);
+      color: var(--gray-light-09);
+      margin-bottom: var(--space-8);
+    }
+    .form-label .required { color: var(--red-light-01); margin-right: 2px; }
+    .form-error {
+      font-size: var(--font-size-12);
+      color: var(--red-light-01);
+      margin-top: var(--space-4);
+    }
+    .form-actions {
+      display: flex;
+      gap: var(--space-12);
+      justify-content: flex-end;
+      margin-top: var(--space-24);
+      flex-wrap: wrap;
+    }
+
+    /* ============ Button：cj-button 复刻 ============ */
+    .cj-button {
+      --el-button-size: 32px;
+      border-radius: var(--radius-md);
+      padding: 0 14px;
+      color: var(--gray-light-10);
+      background-color: var(--gray-light-02);
+      border-color: transparent;
+      font-size: var(--font-size-14);
+      font-family: var(--font-family-regular);
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .cj-button:hover { background: var(--gray-light-03); }
+    .cj-button:active { background: var(--gray-light-04); }
+    .cj-button.is-disabled,
+    .cj-button.is-disabled:hover {
+      color: var(--gray-light-05);
+      background: var(--gray-light-01);
+      cursor: not-allowed;
+    }
+    .cj-button.is-text {
+      background: none;
+      color: var(--gray-light-09);
+      padding: 0 4px;
+    }
+    .cj-button.is-text:hover { color: var(--gray-light-07); background: none; }
+    .cj-button.is-text:active { color: var(--gray-light-10); background: none; }
+    .cj-button.is-text.is-disabled { color: var(--gray-light-05); background: none; }
+    .cj-button.el-button--small { --el-button-size: 28px; padding: 0 12px; font-size: var(--font-size-14); }
+    .cj-button.el-button--large { --el-button-size: 36px; border-radius: var(--radius-lg); }
+    .cj-button.cj-button--xlarge { --el-button-size: 40px; height: var(--el-button-size); padding: 0 16px; border-radius: var(--radius-lg); }
+    .cj-button.is-round { border-radius: var(--radius-pill); }
+    .cj-button.is-circle { width: var(--el-button-size); border-radius: 50%; padding: 0; }
+
+    .cj-button.el-button--primary,
+    .cj-button[type="primary"] {
+      color: #fff;
+      background-color: var(--gray-light-10);
+      border-color: transparent;
+    }
+    .cj-button.el-button--primary:hover,
+    .cj-button[type="primary"]:hover { background-color: var(--gray-light-09); }
+    .cj-button.el-button--primary:active,
+    .cj-button[type="primary"]:active { background-color: var(--gray-light-09); }
+    .cj-button.el-button--primary.is-disabled {
+      color: #fff;
+      background: var(--gray-light-05);
+      border: 1px solid var(--gray-light-05);
+    }
+
+    .cj-button.el-button--brand,
+    .cj-button[type="brand"] {
+      color: #fff;
+      background: linear-gradient(90deg, #FE653D 21.5%, #FF382B 100%);
+      background-origin: border-box;
+      border-color: transparent;
+    }
+    .cj-button.el-button--brand:hover,
+    .cj-button[type="brand"]:hover {
+      background: linear-gradient(90deg, #E55C38 0%, #E53228 100%);
+    }
+    .cj-button.el-button--brand:active,
+    .cj-button[type="brand"]:active {
+      background: linear-gradient(90deg, #E55C38 0%, #E53228 100%);
+    }
+    .cj-button.el-button--brand.is-disabled {
+      background: linear-gradient(90deg, #FFC1B1 0%, #FFAFAA 100%);
+    }
+    .cj-button.el-button--brand.is-text,
+    .cj-button[type="brand"].is-text { background: none; color: var(--primary-light-08); }
+    .cj-button.el-button--brand.is-text:hover,
+    .cj-button[type="brand"].is-text:hover { color: var(--primary-light-07); }
+    .cj-button.el-button--brand.is-text:active,
+    .cj-button[type="brand"].is-text:active { color: var(--primary-light-09); }
+    .cj-button.el-button--brand.is-text.is-disabled { color: var(--primary-light-05); }
+
+    .cj-button.el-button--brandAlt,
+    .cj-button[type="brandAlt"] {
+      color: var(--primary-light-08);
+      background: var(--primary-light-01);
+      border-color: transparent;
+    }
+    .cj-button.el-button--brandAlt:hover,
+    .cj-button[type="brandAlt"]:hover { color: var(--primary-light-07); background: var(--primary-light-02); }
+    .cj-button.el-button--brandAlt:active,
+    .cj-button[type="brandAlt"]:active { color: var(--primary-light-09); background: var(--primary-light-02); }
+    .cj-button.el-button--brandAlt.is-disabled { color: var(--primary-light-05); background: var(--primary-light-01); }
+
+    .cj-button.el-button--border,
+    .cj-button[type="border"] {
+      color: var(--gray-light-10);
+      background-color: #fff;
+      border: 1px solid var(--gray-light-02);
+    }
+    .cj-button.el-button--border:hover,
+    .cj-button[type="border"]:hover { background-color: var(--gray-light-01); border-color: var(--gray-light-06); }
+    .cj-button.el-button--border:active,
+    .cj-button[type="border"]:active { background-color: var(--gray-light-02); border-color: var(--gray-light-07); }
+    .cj-button.el-button--border.is-disabled {
+      color: var(--gray-light-05);
+      background: #fff;
+      border: 1px solid var(--gray-light-02);
+    }
+
+    .cj-button.el-button--brandBorder,
+    .cj-button[type="brandBorder"] {
+      color: var(--primary-light-08);
+      background-color: #fff;
+      border: 1px solid var(--primary-light-08);
+    }
+    .cj-button.el-button--brandBorder:hover,
+    .cj-button[type="brandBorder"]:hover { color: var(--primary-light-07); border-color: var(--primary-light-07); }
+    .cj-button.el-button--brandBorder:active,
+    .cj-button[type="brandBorder"]:active { color: var(--primary-light-09); border-color: var(--primary-light-09); }
+    .cj-button.el-button--brandBorder.is-disabled {
+      color: var(--primary-light-05);
+      border: 1px solid var(--primary-light-05);
+      background: #fff;
+    }
+
+    .cj-button.el-button--danger,
+    .cj-button[type="danger"] {
+      color: #fff;
+      background: var(--red-light-01);
+      border-color: transparent;
+    }
+    .cj-button.el-button--danger:hover,
+    .cj-button[type="danger"]:hover { background: var(--red-light-02); }
+    .cj-button.el-button--danger:active,
+    .cj-button[type="danger"]:active { background: var(--red-light-03); }
+    .cj-button.el-button--danger.is-disabled { background: var(--red-light-04); }
+
+    .cj-button.el-button--dangerBorder,
+    .cj-button[type="dangerBorder"] {
+      color: var(--red-light-01);
+      background-color: #fff;
+      border: 1px solid var(--red-light-01);
+    }
+    .cj-button.el-button--dangerBorder:hover,
+    .cj-button[type="dangerBorder"]:hover { background-color: var(--red-light-06); border-color: var(--red-light-02); }
+    .cj-button.el-button--dangerBorder:active,
+    .cj-button[type="dangerBorder"]:active { background-color: var(--red-light-06); border-color: var(--red-light-03); }
+    .cj-button.el-button--dangerBorder.is-disabled {
+      color: var(--primary-light-05);
+      background-color: #fff;
+      border: 1px solid var(--primary-light-05);
+    }
+
+    .cj-button.el-button--white,
+    .cj-button[type="white"] {
+      color: var(--gray-light-10);
+      background-color: #fff;
+      border-color: transparent;
+    }
+    .cj-button.el-button--white:hover,
+    .cj-button[type="white"]:hover { background-color: var(--gray-light-02); }
+    .cj-button.el-button--white:active,
+    .cj-button[type="white"]:active { background-color: var(--gray-light-03); }
+
+    /* ============ Input：cj-input 复刻 ============ */
+    .cj-input,
+    .cj-input.el-input { width: 100%; min-width: 0; }
+    .cj-input { --el-input-height: 32px; }
+    .cj-input .el-input__wrapper {
+      border-radius: var(--radius-md);
+      background: var(--gray-light-01);
+      box-shadow: 0 0 0 1px var(--gray-light-01) inset;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .cj-input .el-input__inner { color: var(--gray-light-10); }
+    .cj-input .el-input__wrapper:hover {
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--primary-light-08) inset;
+    }
+    .cj-input .el-input__wrapper.is-focus {
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--primary-light-08) inset;
+    }
+    .cj-input input::placeholder { color: var(--gray-light-05); }
+    .cj-input.el-input--small { --el-input-height: 28px; }
+    .cj-input.el-input--medium { --el-input-height: 36px; }
+    .cj-input.el-input--large { --el-input-height: 40px; }
+    .cj-input.is-disabled .el-input__wrapper,
+    .cj-input.is-disabled .el-input__wrapper:hover {
+      background: var(--gray-light-02);
+      box-shadow: 0 0 0 1px var(--gray-light-02) inset;
+    }
+    .cj-input.is-disabled .el-input__inner { color: var(--gray-light-05); }
+
+    .cj-textarea,
+    .cj-textarea.el-textarea { width: 100%; min-width: 0; }
+    .cj-textarea .el-textarea__inner {
+      background: var(--gray-light-01);
+      box-shadow: 0 0 0 1px var(--gray-light-01) inset;
+      color: var(--gray-light-10);
+      border: none;
+      border-radius: var(--radius-md);
+      resize: none;
+      font-family: var(--font-family-regular);
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .cj-textarea .el-textarea__inner:hover,
+    .cj-textarea .el-textarea__inner:focus {
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--primary-light-08) inset;
+    }
+    .cj-textarea textarea::placeholder { color: var(--gray-light-05); }
+    .cj-textarea .el-input__count {
+      color: var(--gray-light-07);
+      background: transparent;
+    }
+    .cj-textarea.is-disabled .el-textarea__inner,
+    .cj-textarea.is-disabled .el-textarea__inner:hover {
+      background: var(--gray-light-02);
+      box-shadow: 0 0 0 1px var(--gray-light-02) inset;
+      color: var(--gray-light-05);
+    }
+
+    /* ============ 响应式断点 ============ */
+    /* 平板 */
+    @media (max-width: 1024px) {
+      .page { padding: var(--space-16); }
+      .page-title { font-size: var(--font-size-20); }
+    }
+    /* 手机 */
+    @media (max-width: 768px) {
+      .page { padding: var(--space-12); }
+      .page-title { font-size: var(--font-size-18); }
+      .card { padding: var(--space-16); }
+      .form-row { gap: var(--space-12); }
+      .form-actions { flex-direction: column-reverse; }
+      .form-actions .cj-button { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ====================== TEMPLATE 段开始 ====================== -->
+    <div class="page">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">页面标题</h1>
+          <p class="page-description">页面描述文案</p>
+        </div>
+        <div>
+          <el-button class="cj-button" type="border">次要操作</el-button>
+          <el-button class="cj-button" type="brand">主要操作</el-button>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="card-title">区块标题</h2>
+        <p>在这里放置内容…</p>
+      </section>
+    </div>
+    <!-- ====================== TEMPLATE 段结束 ====================== -->
+  </div>
+
+  <!-- Vue 3 + Element Plus CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/element-plus"></script>
+  <script src="https://unpkg.com/element-plus/dist/locale/zh-cn"></script>
+
+  <script>
+    // ====================== SCRIPT 段开始 ======================
+    const { createApp, ref, reactive, computed, onMounted } = Vue;
+
+    const App = {
+      setup() {
+        // TODO[STATE]: 在此声明响应式状态
+
+        // TODO[API]: 在此调用接口
+        // 示例：const fetchData = async () => { ... }
+
+        // TODO[STORE]: 在此接入 Pinia store
+
+        // TODO[ROUTE]: 在此处理路由跳转
+        // 示例：const goDetail = (id) => router.push(`/detail/${id}`)
+
+        return {
+          // 暴露给模板的变量/方法
+        };
+      },
+    };
+
+    createApp(App)
+      .use(ElementPlus, { locale: ElementPlusLocaleZhCn })
+      .mount('#app');
+    // ====================== SCRIPT 段结束 ======================
+  </script>
+</body>
+</html>

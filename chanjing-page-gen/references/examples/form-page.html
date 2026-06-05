@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<!--
+  ====================================================================
+  示例：新建数字人配置 - 表单页
+  ====================================================================
+  生成版本：chanjing-page-gen v0.1.0
+
+  二次开发提示（给开发）：
+    1. 整个 <div class="page"> 块复制到 .vue 的 <template>
+    2. setup() 内的状态/方法复制到 <script setup> 顶层
+    3. 业务接入点搜索关键字：TODO[API] / TODO[STORE] / TODO[ROUTE]
+    4. mock 数据（avatarOptions / voiceOptions）来自硬编码，需替换为接口
+    5. handleSubmit 当前只 console.log，需接入实际保存接口
+  ====================================================================
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>新建数字人配置</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
+  <style>
+    /* ============ Design Tokens ============ */
+    :root {
+      --gray-light-01: #F7F8FA; --gray-light-02: #EDEFF3; --gray-light-03: #E5E6EC;
+      --gray-light-04: #DBDEE3; --gray-light-05: #C9CDD4; --gray-light-06: #A9AEB8;
+      --gray-light-07: #86909C; --gray-light-08: #6B7785; --gray-light-09: #4E5969;
+      --gray-light-10: #1D2129;
+      --primary-light-01: #FFF8F6; --primary-light-02: #FFF1EE; --primary-light-05: #FFC9BA;
+      --primary-light-07: #FF9275; --primary-light-08: #FF7752; --primary-light-09: #E56B4A;
+      --red-light-01: #F54B45; --red-light-02: #F76E66; --red-light-03: #CB2C2B;
+      --red-light-04: #FBB1A5; --red-light-06: #FFEDE8;
+      --font-family-regular: "PingFangSC-Regular", "Microsoft Yahei", Arial, sans-serif;
+      --font-family-medium: "PingFangSC-Medium", "Microsoft Yahei", Arial, sans-serif;
+      --font-family-bold: "PingFangSC-Semibold", "PingFangSC-Regular", "Microsoft Yahei", Arial, sans-serif;
+      --font-size-12: 12px; --font-size-14: 14px; --font-size-16: 16px;
+      --font-size-18: 18px; --font-size-20: 20px; --font-size-24: 24px;
+      --radius-md: 6px; --radius-lg: 8px; --radius-pill: 100px;
+      --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px;
+      --space-20: 20px; --space-24: 24px; --space-32: 32px;
+      --el-color-primary: #FF7752;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-family-regular);
+      font-size: var(--font-size-14);
+      color: var(--gray-light-10);
+      background: var(--gray-light-01);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============ 页面布局 ============ */
+    .page { max-width: 960px; margin: 0 auto; padding: var(--space-32) var(--space-24); }
+    .page-header { margin-bottom: var(--space-24); }
+    .breadcrumb {
+      font-size: var(--font-size-12);
+      color: var(--gray-light-07);
+      margin-bottom: var(--space-12);
+    }
+    .breadcrumb a { color: var(--gray-light-07); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--primary-light-08); }
+    .page-title {
+      font-size: var(--font-size-24);
+      font-family: var(--font-family-bold);
+      margin: 0;
+    }
+    .page-description {
+      font-size: var(--font-size-14);
+      color: var(--gray-light-08);
+      margin: var(--space-8) 0 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      border: 1px solid var(--gray-light-02);
+    }
+    .card + .card { margin-top: var(--space-16); }
+    .card-title {
+      font-size: var(--font-size-16);
+      font-family: var(--font-family-medium);
+      margin: 0 0 var(--space-20);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+    .card-title::before {
+      content: '';
+      width: 3px;
+      height: 14px;
+      background: var(--primary-light-08);
+      border-radius: 2px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-16);
+      margin-bottom: var(--space-20);
+    }
+    .form-row:last-child { margin-bottom: 0; }
+    .form-item { min-width: 0; display: flex; flex-direction: column; }
+    .form-item.full { grid-column: 1 / -1; }
+    .form-label {
+      font-size: var(--font-size-14);
+      color: var(--gray-light-09);
+      margin-bottom: var(--space-8);
+    }
+    .form-label .required { color: var(--red-light-01); margin-right: 2px; }
+    .form-tip { font-size: var(--font-size-12); color: var(--gray-light-07); margin-top: var(--space-4); }
+    .form-error { font-size: var(--font-size-12); color: var(--red-light-01); margin-top: var(--space-4); }
+    .form-actions {
+      display: flex; gap: var(--space-12); justify-content: flex-end;
+      margin-top: var(--space-24); padding-top: var(--space-24);
+      border-top: 1px solid var(--gray-light-02); flex-wrap: wrap;
+    }
+
+    /* 选项卡片网格（如选择头像/音色） */
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: var(--space-12);
+    }
+    .option-card {
+      border: 1px solid var(--gray-light-02);
+      border-radius: var(--radius-lg);
+      padding: var(--space-16);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+      background: #fff;
+    }
+    .option-card:hover { border-color: var(--primary-light-08); }
+    .option-card.is-selected {
+      border-color: var(--primary-light-08);
+      background: var(--primary-light-01);
+    }
+    .option-card .avatar {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--gray-light-02);
+      margin: 0 auto var(--space-8);
+      display: flex; align-items: center; justify-content: center;
+      font-size: var(--font-size-20);
+      color: var(--gray-light-07);
+    }
+    .option-card.is-selected .avatar { background: var(--primary-light-02); color: var(--primary-light-08); }
+    .option-card .name {
+      font-size: var(--font-size-14);
+      color: var(--gray-light-10);
+      font-family: var(--font-family-medium);
+    }
+    .option-card .meta {
+      font-size: var(--font-size-12);
+      color: var(--gray-light-07);
+      margin-top: var(--space-4);
+    }
+
+    /* ============ Button：cj-button 复刻（精简版，仅本示例用到的变体） ============ */
+    .cj-button {
+      --el-button-size: 32px;
+      border-radius: var(--radius-md);
+      padding: 0 14px;
+      color: var(--gray-light-10);
+      background-color: var(--gray-light-02);
+      border-color: transparent;
+      font-size: var(--font-size-14);
+      font-family: var(--font-family-regular);
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .cj-button:hover { background: var(--gray-light-03); }
+    .cj-button:active { background: var(--gray-light-04); }
+    .cj-button.is-disabled, .cj-button.is-disabled:hover {
+      color: var(--gray-light-05); background: var(--gray-light-01); cursor: not-allowed;
+    }
+    .cj-button.el-button--large { --el-button-size: 36px; border-radius: var(--radius-lg); }
+    .cj-button.is-round { border-radius: var(--radius-pill); }
+
+    .cj-button[type="brand"] {
+      color: #fff;
+      background: linear-gradient(90deg, #FE653D 21.5%, #FF382B 100%);
+      background-origin: border-box;
+    }
+    .cj-button[type="brand"]:hover,
+    .cj-button[type="brand"]:active {
+      background: linear-gradient(90deg, #E55C38 0%, #E53228 100%);
+    }
+    .cj-button[type="brand"].is-disabled {
+      background: linear-gradient(90deg, #FFC1B1 0%, #FFAFAA 100%);
+    }
+    .cj-button[type="border"] {
+      color: var(--gray-light-10);
+      background-color: #fff;
+      border: 1px solid var(--gray-light-02);
+    }
+    .cj-button[type="border"]:hover {
+      background-color: var(--gray-light-01);
+      border-color: var(--gray-light-06);
+    }
+    .cj-button[type="dangerBorder"] {
+      color: var(--red-light-01);
+      background-color: #fff;
+      border: 1px solid var(--red-light-01);
+    }
+    .cj-button[type="dangerBorder"]:hover {
+      background-color: var(--red-light-06);
+      border-color: var(--red-light-02);
+    }
+
+    /* ============ Input：cj-input / cj-textarea 复刻 ============ */
+    .cj-input,
+    .cj-input.el-input,
+    .cj-textarea,
+    .cj-textarea.el-textarea { width: 100%; min-width: 0; }
+    .cj-input { --el-input-height: 32px; }
+    .cj-input.el-input--large { --el-input-height: 40px; }
+    .cj-input .el-input__wrapper {
+      border-radius: var(--radius-md);
+      background: var(--gray-light-01);
+      box-shadow: 0 0 0 1px var(--gray-light-01) inset;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .cj-input .el-input__inner { color: var(--gray-light-10); }
+    .cj-input .el-input__wrapper:hover,
+    .cj-input .el-input__wrapper.is-focus {
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--primary-light-08) inset;
+    }
+    .cj-input input::placeholder { color: var(--gray-light-05); }
+
+    .cj-input.is-error .el-input__wrapper {
+      box-shadow: 0 0 0 1px var(--red-light-01) inset;
+    }
+
+    .cj-textarea .el-textarea__inner {
+      background: var(--gray-light-01);
+      box-shadow: 0 0 0 1px var(--gray-light-01) inset;
+      color: var(--gray-light-10);
+      border: none;
+      border-radius: var(--radius-md);
+      resize: none;
+      font-family: var(--font-family-regular);
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .cj-textarea .el-textarea__inner:hover,
+    .cj-textarea .el-textarea__inner:focus {
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--primary-light-08) inset;
+    }
+    .cj-textarea textarea::placeholder { color: var(--gray-light-05); }
+    .cj-textarea .el-input__count {
+      color: var(--gray-light-07);
+      background: transparent;
+    }
+
+    /* ============ 响应式 ============ */
+    @media (max-width: 1024px) {
+      .page { padding: var(--space-24) var(--space-16); }
+    }
+    @media (max-width: 768px) {
+      .page { padding: var(--space-16) var(--space-12); }
+      .page-title { font-size: var(--font-size-20); }
+      .card { padding: var(--space-16); }
+      .form-row { gap: var(--space-12); margin-bottom: var(--space-16); }
+      .form-actions { flex-direction: column-reverse; }
+      .form-actions .cj-button { width: 100%; }
+      .option-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ====================== TEMPLATE 段开始 ====================== -->
+    <div class="page">
+      <header class="page-header">
+        <nav class="breadcrumb">
+          <!-- TODO[ROUTE]: 接入路由跳转 -->
+          <a href="javascript:;" @click="goHome">数字人</a>
+          <span> / 新建配置</span>
+        </nav>
+        <h1 class="page-title">新建数字人配置</h1>
+        <p class="page-description">为您的数字人选择形象、音色和基本信息</p>
+      </header>
+
+      <!-- 基本信息 -->
+      <section class="card">
+        <h2 class="card-title">基本信息</h2>
+
+        <div class="form-row">
+          <div class="form-item">
+            <label class="form-label">
+              <span class="required">*</span>数字人名称
+            </label>
+            <el-input
+              class="cj-input"
+              :class="{ 'is-error': errors.name }"
+              v-model="form.name"
+              placeholder="请输入数字人名称（不超过 20 个字）"
+              maxlength="20"
+            />
+            <div v-if="errors.name" class="form-error">{{ errors.name }}</div>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label">所属分组</label>
+            <el-input
+              class="cj-input"
+              v-model="form.group"
+              placeholder="选填，可用于分类管理"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-item full">
+            <label class="form-label">简介</label>
+            <el-input
+              class="cj-textarea"
+              type="textarea"
+              :rows="4"
+              v-model="form.description"
+              placeholder="简单描述一下这个数字人的用途，最多 200 字"
+              maxlength="200"
+              show-word-limit
+            />
+            <div class="form-tip">将展示在数字人列表卡片下方</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 选择形象 -->
+      <section class="card">
+        <h2 class="card-title">选择形象</h2>
+        <div class="option-grid">
+          <div
+            v-for="item in avatarOptions"
+            :key="item.id"
+            class="option-card"
+            :class="{ 'is-selected': form.avatarId === item.id }"
+            @click="form.avatarId = item.id"
+          >
+            <div class="avatar">{{ item.icon }}</div>
+            <div class="name">{{ item.name }}</div>
+            <div class="meta">{{ item.style }}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 选择音色 -->
+      <section class="card">
+        <h2 class="card-title">选择音色</h2>
+        <div class="option-grid">
+          <div
+            v-for="item in voiceOptions"
+            :key="item.id"
+            class="option-card"
+            :class="{ 'is-selected': form.voiceId === item.id }"
+            @click="form.voiceId = item.id"
+          >
+            <div class="avatar">{{ item.icon }}</div>
+            <div class="name">{{ item.name }}</div>
+            <div class="meta">{{ item.gender }} · {{ item.lang }}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 操作按钮 -->
+      <div class="form-actions">
+        <el-button class="cj-button" type="dangerBorder" size="large" @click="handleDelete">
+          删除草稿
+        </el-button>
+        <el-button class="cj-button" type="border" size="large" @click="handleSaveDraft">
+          保存草稿
+        </el-button>
+        <el-button class="cj-button" type="brand" size="large" @click="handleSubmit">
+          创建数字人
+        </el-button>
+      </div>
+    </div>
+    <!-- ====================== TEMPLATE 段结束 ====================== -->
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/element-plus"></script>
+  <script src="https://unpkg.com/element-plus/dist/locale/zh-cn"></script>
+
+  <script>
+    // ====================== SCRIPT 段开始 ======================
+    const { createApp, ref, reactive, computed } = Vue;
+
+    const App = {
+      setup() {
+        const form = reactive({
+          name: '',
+          group: '',
+          description: '',
+          avatarId: '',
+          voiceId: '',
+        });
+
+        const errors = reactive({
+          name: '',
+        });
+
+        // TODO[API]: 替换为接口数据
+        const avatarOptions = [
+          { id: 'a1', name: '小蝉', icon: '🤖', style: '商务风' },
+          { id: 'a2', name: '小镜', icon: '👩', style: '亲和风' },
+          { id: 'a3', name: '小智', icon: '👨', style: '专业风' },
+          { id: 'a4', name: '小明', icon: '🧑', style: '活力风' },
+        ];
+
+        // TODO[API]: 替换为接口数据
+        const voiceOptions = [
+          { id: 'v1', name: '温柔女声', icon: '🎙', gender: '女', lang: '中文' },
+          { id: 'v2', name: '磁性男声', icon: '🎙', gender: '男', lang: '中文' },
+          { id: 'v3', name: '清新女声', icon: '🎙', gender: '女', lang: '中文' },
+          { id: 'v4', name: '英文男声', icon: '🎙', gender: '男', lang: 'English' },
+        ];
+
+        const validate = () => {
+          errors.name = '';
+          if (!form.name.trim()) {
+            errors.name = '请输入数字人名称';
+            return false;
+          }
+          return true;
+        };
+
+        const handleSubmit = () => {
+          if (!validate()) return;
+          // TODO[API]: 接入「创建数字人」接口
+          // TODO[ROUTE]: 创建成功后跳转到详情页
+          ElementPlus.ElMessage.success('创建成功（演示）');
+          console.log('submit', { ...form });
+        };
+
+        const handleSaveDraft = () => {
+          // TODO[API]: 接入「保存草稿」接口
+          // TODO[STORE]: 同步草稿到 Pinia store
+          ElementPlus.ElMessage.success('草稿已保存（演示）');
+        };
+
+        const handleDelete = () => {
+          // TODO[API]: 接入「删除草稿」接口
+          ElementPlus.ElMessageBox.confirm('确定删除草稿？', '提示', {
+            type: 'warning',
+            confirmButtonText: '删除',
+            cancelButtonText: '取消',
+          }).then(() => {
+            ElementPlus.ElMessage.success('已删除（演示）');
+          }).catch(() => {});
+        };
+
+        const goHome = () => {
+          // TODO[ROUTE]: router.push('/digital-human')
+          console.log('go home');
+        };
+
+        return {
+          form, errors, avatarOptions, voiceOptions,
+          handleSubmit, handleSaveDraft, handleDelete, goHome,
+        };
+      },
+    };
+
+    createApp(App)
+      .use(ElementPlus, { locale: ElementPlusLocaleZhCn })
+      .mount('#app');
+    // ====================== SCRIPT 段结束 ======================
+  </script>
+</body>
+</html>
